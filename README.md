@@ -9,25 +9,31 @@
 using namespace ICONation::SDK;
 using namespace ICONation::SDK::Blockchain;
 
-int main ()
+int main (int argc, char **argv)
 {
     // Create SDK-RPC client
     ICONation::SDK::Client client ("http://iconation.team:9100/api/v3");
 
     // Generate a new ICX wallet
-    Wallet wallet = client.wallet_create ();
+    Wallet wallet = client.wallet_create();
 
     // Get your balance
-    ICX::Loop balance = client.get_balance (wallet.get_address ());
+    ICX::Loop balance = client.get_balance (wallet.get_address());
 
     // Get information about the latest block
     Block block = client.get_last_block();
 
+    // Get information about the previous block
+    Block previousBlock = client.get_block_by_height (block.height() - 1);
+
     // Get genesis block (block height = 0)
-    Block genesis = client.get_block_by_height (0);
+    GenesisBlock genesis = client.get_genesis_block();
 
     // Get total ICX supply amount
-    ICX::Loop supply = client.get_total_supply ();
+    ICX::Loop supply = client.get_total_supply();
+
+    // Get the step price from the governance SCORE
+    ICX::Loop stepPrice = client.get_step_price();
 
     // Transfer 5 ICX to hx0000000000000000000000000000000000000000 with stepLimit = 1000000 steps
     Transaction::Hash txhash = client.wallet_send_icx (
@@ -61,6 +67,13 @@ int main ()
         wallet, "cx0000000000000000000000000000000000000000",
         "application/zip", zipbytes, {}, 15 * ICX_TO_STEP
     );
+
+    // Check if a SCORE address hosts an IRC2 Token
+    if (irc2_token_compliant ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0")) {
+        // Get MECA token information
+        IRC2 mca = get_irc2_token ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0);
+        std::cout << "MCA total supply : " << mca.totalSupply() << std::endl;
+    }
 
     return 0;
 }
