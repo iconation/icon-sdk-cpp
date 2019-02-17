@@ -122,10 +122,12 @@ $ cd ../release/x64/ && ./SDK_Tests
 ## Documentation
 
 ```C++
-
 // Returns the last block information.
 // https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#icx_getlastblock
 Blockchain::Block get_last_block (void);
+
+// Returns the first block (genesis) information
+Blockchain::GenesisBlock get_genesis_block (void);
 
 // Returns block information by block height
 // https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#icx_getblockbyheight
@@ -149,7 +151,7 @@ nlohmann::json get_score_api (const Blockchain::Address &address);
 nlohmann::json call_score_readonly (
     const Blockchain::Address &score, 
     const std::string &method, 
-    const nlohmann::json &params
+    const nlohmann::json &params = {}
 );
 
 // Returns total ICX coin supply that has been issued
@@ -196,6 +198,13 @@ Blockchain::Transaction::Hash wallet_deploy (
     const int &nonce = 0
 );
 
+// IRC2 Token
+// https://icondev.readme.io/docs/audit-checklist#section-irc2-token-standard-compliance
+// Check if the SCORE is compliant to IRC2 standards
+bool irc2_token_compliant (const Blockchain::Address &score);
+// Get information about an IRC2 token from a SCORE address
+Blockchain::IRC2 get_irc2_token (const Blockchain::Address &score);
+
 // Generate a new wallet
 Blockchain::Wallet wallet_create (void);
 
@@ -211,5 +220,4 @@ Blockchain::Wallet wallet_load (
 
 // Get governance step price
 Blockchain::ICX::Loop get_step_price (void);
-
 ```
