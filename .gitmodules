@@ -1,0 +1,3 @@
+[submodule "common-lib-cpp"]
+	path = common-lib-cpp
+	url = https://github.com/iconation/common-lib-cpp
