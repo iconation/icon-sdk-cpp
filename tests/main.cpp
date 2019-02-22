@@ -63,13 +63,13 @@ namespace ICONation::SDK::Tests
         EXPECT_THROW (Address ("hxZZZZZZZZZZZ"), Blockchain::Exception::InvalidHexOnly);
     }
 
-    TEST (RPC, GetLastBlock)
+    TEST (RPC, ICX_GetLastBlock)
     {
         // Check success
         EXPECT_NO_THROW (client.get_last_block());
     }
     
-    TEST (RPC, GetBlockByHeight)
+    TEST (RPC, ICX_GetBlockByHeight)
     {
         Block block1, block2;
 
@@ -90,7 +90,7 @@ namespace ICONation::SDK::Tests
         EXPECT_THROW (client.get_block_by_height (-1), SDK::Exception::RPCError);
     }
     
-    TEST (RPC, GetGenesisBlock)
+    TEST (RPC, ICX_GetGenesisBlock)
     {
         GenesisBlock genesis;
 
@@ -104,7 +104,7 @@ namespace ICONation::SDK::Tests
         EXPECT_NO_THROW (genesis.check_consistency());
     }
 
-    TEST (RPC, GetBlockByHash)
+    TEST (RPC, ICX_GetBlockByHash)
     {
         Block block1, block2;
         
@@ -120,12 +120,12 @@ namespace ICONation::SDK::Tests
         EXPECT_TRUE (block1.transactions().size() == block2.transactions().size());
     }
 
-    TEST (RPC, GetScoreApi)
+    TEST (RPC, ICX_GetScoreApi)
     {
         EXPECT_NO_THROW (client.get_score_api (GOVERNANCE_SCORE_ADDRESS));
     }
 
-    TEST (RPC, GetTotalSupply)
+    TEST (RPC, ICX_GetTotalSupply)
     {
         ICX::Loop loops;
 
@@ -134,7 +134,7 @@ namespace ICONation::SDK::Tests
         EXPECT_TRUE (loops == (1600920000 * ICX::TO_LOOP));
     }
 
-    TEST (RPC, GetTransactionResult)
+    TEST (RPC, ICX_GetTransactionResult)
     {
         TransactionResult result = emptyTxResult;
         Transaction::Hash hash = emptyTxHash;
@@ -147,7 +147,7 @@ namespace ICONation::SDK::Tests
         EXPECT_TRUE (result.txHash().to_string() == hash.to_string());
     }
 
-    TEST (RPC, GetTransactionByHash)
+    TEST (RPC, ICX_GetTransactionByHash)
     {
         Transaction tx = emptyTx;
         Transaction::Hash hash = emptyTxHash;
@@ -160,7 +160,7 @@ namespace ICONation::SDK::Tests
         EXPECT_TRUE (tx.hash().to_string() == hash.to_string());
     }
 
-    TEST (RPC, CallScoreReadOnly)
+    TEST (RPC, ICX_CallScoreReadOnly)
     {
         nlohmann::json result;
         ICX::Loop price;
@@ -177,7 +177,7 @@ namespace ICONation::SDK::Tests
         EXPECT_GT (price, 0);
     }
 
-    TEST (RPC, GetBalance)
+    TEST (RPC, ICX_GetBalance)
     {
         ICX::Loop loops = client.get_balance (wallet.get_address());
 
@@ -187,7 +187,7 @@ namespace ICONation::SDK::Tests
         EXPECT_LT (loops, (20 * ICX::TO_LOOP));
     }
 
-    TEST (RPC, WalletSendICX)
+    TEST (RPC, ICX_WalletSendICX)
     {
         // Let's send 0 ICX to the governance wallet
         EXPECT_NO_THROW (
@@ -195,7 +195,7 @@ namespace ICONation::SDK::Tests
         );
     }
 
-    TEST (RPC, WalletCallScore)
+    TEST (RPC, ICX_WalletCallScore)
     {
         // Random score contract - it should still return an error, but the rpc call is OK
         EXPECT_NO_THROW (
@@ -208,7 +208,7 @@ namespace ICONation::SDK::Tests
         );
     }
 
-    TEST (RPC, WalletDeploy)
+    TEST (RPC, ICX_WalletDeploy)
     {
         // Assume 1 ICX = 100 millions steps
         ICX::Loop ICX_TO_STEP = ICX::TO_LOOP / client.get_step_price();
@@ -279,7 +279,15 @@ namespace ICONation::SDK::Tests
         // It should have cost ~10 ICX
         EXPECT_GT (before, after);
     }
+
+    TEST (RPC, ISE_GetStatus)
+    {
+        nlohmann::json result;
+        EXPECT_NO_THROW (result = client.ise_getStatus ({"lastBlock"}));
+        EXPECT_TRUE (!result["lastBlock"].empty());
+    }
 }
+
 
 int main (int argc, char **argv)
 {

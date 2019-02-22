@@ -121,6 +121,11 @@ namespace ICONation::SDK
             // Get governance step price
             Blockchain::ICX::Loop get_step_price (void);
 
+            // Get node status
+            // filters need to be at least one of these values :
+            // ['lastBlock']
+            nlohmann::json ise_getStatus (const std::vector<std::string> &filters);
+
         private:
             nlohmann::json call (const std::string &method, const nlohmann::json &params);
             Blockchain::Block read_block (const nlohmann::json &result);

@@ -545,4 +545,20 @@ namespace ICONation::SDK
     {
         return ICX::Loop (call_score_readonly (GOVERNANCE_SCORE_ADDRESS, "getStepPrice", {}).get<std::string>());
     }
+
+    json Client::ise_getStatus (const std::vector<std::string> &filters)
+    {
+        // Build params
+        json params;
+
+        if (!filters.empty()) {
+            params ["filter"] = filters;
+        }
+
+        // RPC Call
+        json result = call ("ise_getStatus", params);
+
+        // Read result
+        return result;
+    }
 }
