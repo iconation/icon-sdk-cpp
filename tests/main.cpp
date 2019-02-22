@@ -5,6 +5,8 @@
 #include "common/exception/exception.h"
 #include "common/dbg/dbg.h"
 #include "common/http/http.h"
+#include <chrono>
+#include <thread>
 
 using namespace ICONation::Common;
 using namespace ICONation::SDK::Blockchain;
@@ -12,7 +14,7 @@ using namespace ICONation::SDK::Blockchain;
 namespace ICONation::SDK::Tests
 {
     // Global variables
-    SDK::Client client ("https://bicon.net.solidwallet.io/api/v3");
+    SDK::Client client ("http://iconation.team:9000/api/v3");
     const Wallet wallet = client.wallet_create();
     // Usable objects
     Block::Hash emptyBlockHash ("0x0000000000000000000000000000000000000000000000000000000000000000");
@@ -286,8 +288,14 @@ namespace ICONation::SDK::Tests
         EXPECT_NO_THROW (result = client.ise_getStatus ({"lastBlock"}));
         EXPECT_TRUE (!result["lastBlock"].empty());
     }
-}
 
+    TEST (RPC, ICX_IsIRC2Compliant)
+    {
+        // Check if a SCORE address hosts an IRC2 Token
+        EXPECT_NO_THROW (client.irc2_token_compliant ("cx2959a59f38cfa72617647a61addbab831cc3970e"));
+        EXPECT_NO_THROW (client.get_irc2_token ("cx2959a59f38cfa72617647a61addbab831cc3970e"));
+    }
+}
 
 int main (int argc, char **argv)
 {
@@ -306,6 +314,10 @@ int main (int argc, char **argv)
         if (result.find("Successfully sent")) {
             Dbg::info ("{} received 20 ICX !", wallet.get_address());
         }
+
+        // Let's wait for a little bit
+        Dbg::info ("Sleeping for 2 seconds so we got time for a new block");
+        std::this_thread::sleep_for (std::chrono::milliseconds (2 * 1000));
 
         testing::InitGoogleTest (&argc, argv);
         return RUN_ALL_TESTS();

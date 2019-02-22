@@ -69,9 +69,9 @@ int main (int argc, char **argv)
     );
 
     // Check if a SCORE address hosts an IRC2 Token
-    if (irc2_token_compliant ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0")) {
+    if (client.irc2_token_compliant ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0")) {
         // Get MECA token information
-        IRC2 mca = get_irc2_token ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0);
+        IRC2 mca = client.get_irc2_token ("cxf9148db4f8ec78823a50cb06c4fed83660af38d0");
         std::cout << "MCA total supply : " << mca.totalSupply() << std::endl;
     }
 
