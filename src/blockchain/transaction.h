@@ -67,56 +67,56 @@ namespace ICONation::SDK::Blockchain
         // Hash
         public:
             const Transaction::Hash &hash (void) const { return m_hash; }
-            Transaction::Hash &mutable_hash (void) { return m_hash; }
+            Transaction::Hash &hash (void) { return m_hash; }
         private:
             Transaction::Hash m_hash;
 
         // Sender & Receiver
         public:
             const Address &to (void) const { return m_to; }
-            Address &mutable_to (void) { return m_to; }
+            Address &to (void) { return m_to; }
         private:
             Address m_from;
         public:
             const Address &from (void) const { return m_from; }
-            Address &mutable_from (void) { return m_from; }
+            Address &from (void) { return m_from; }
         private:
             Address m_to;
 
         // ICX Amount
         public:
             const ICX::Loop &amount (void) const { return m_amount; }
-            ICX::Loop &mutable_amount (void) { return m_amount; }
+            ICX::Loop &amount (void) { return m_amount; }
         private:
             ICX::Loop m_amount;
 
         // Transaction type
         public:
             const TransactionType &type (void) const { return m_type; }
-            TransactionType &mutable_type (void) { return m_type; }
+            TransactionType &type (void) { return m_type; }
         private:
             TransactionType m_type = TX_UNKNOWN;
 
         // Steps
         public:
             const ICX::Step &stepUsed (void) const { return m_stepUsed; }
-            ICX::Step &mutable_stepUsed (void) { return m_stepUsed; }
+            ICX::Step &stepUsed (void) { return m_stepUsed; }
         private:
             ICX::Step m_stepUsed;
         public:
             const ICX::Step &stepLimit (void) const { return m_stepLimit; }
-            ICX::Step &mutable_stepLimit (void) { return m_stepLimit; }
+            ICX::Step &stepLimit (void) { return m_stepLimit; }
         private:
             ICX::Step m_stepLimit;
         public:
             const ICX::Loop &stepPrice (void) const { return m_stepPrice; }
-            ICX::Loop &mutable_stepPrice (void) { return m_stepPrice; }
+            ICX::Loop &stepPrice (void) { return m_stepPrice; }
         private:
             ICX::Loop m_stepPrice;
 
         // Internal transactions
         public:
-            std::vector<InternalTransaction> &mutable_internalTransactions (void) { return m_internalTransactions; }
+            std::vector<InternalTransaction> &internalTransactions (void) { return m_internalTransactions; }
             const std::vector<InternalTransaction> &internalTransactions (void) const { return m_internalTransactions; }
         private:
             std::vector<InternalTransaction> m_internalTransactions;

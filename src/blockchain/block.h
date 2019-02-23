@@ -76,7 +76,7 @@ namespace ICONation::SDK::Blockchain
         // Transaction
         public:
             const std::vector<Transaction> &transactions (void) const { return m_transactions; }
-            std::vector<Transaction> &mutable_transactions (void) { return m_transactions; }
+            std::vector<Transaction> &transactions (void) { return m_transactions; }
         private:
             std::vector<Transaction> m_transactions;
 

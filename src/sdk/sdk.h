@@ -112,7 +112,7 @@ namespace ICONation::SDK
 
             // Load a wallet from a private key
             Blockchain::Wallet wallet_load (const std::vector<unsigned char> &privateKey);
-            Blockchain::Wallet wallet_load (void *privateKeyBytes); // must be 32 bytes
+            Blockchain::Wallet wallet_load (const void *privateKeyBytes); // must be 32 bytes
 
             // Load from keystore + password
             Blockchain::Wallet wallet_load (

@@ -33,7 +33,7 @@ namespace ICONation::SDK
 
     static void read_transaction_icx_transfer (Transaction &transaction, const json &transactionJson)
     {
-        transaction.mutable_amount() = ICX::Loop (transactionJson["value"].get<std::string>());
+        transaction.amount() = ICX::Loop (transactionJson["value"].get<std::string>());
     }
 
     static void read_transaction_data (Transaction &transaction, const json &transactionJson)
@@ -42,17 +42,17 @@ namespace ICONation::SDK
 
         // SCORE Method call transaction
         if (dataType == "call") {
-            transaction.mutable_type() = TX_SCORE_CALL;
+            transaction.type() = TX_SCORE_CALL;
             // read_transaction_call (transaction, transactionJson);
         }
         // SCORE Deploy transaction
         else if (dataType == "deploy") {
-            transaction.mutable_type() = TX_SCORE_DEPLOY;
+            transaction.type() = TX_SCORE_DEPLOY;
             // read_transaction_deploy (transaction, transactionJson);
         }
         // Message transaction
         else if (dataType == "message") {
-            transaction.mutable_type() = TX_MESSAGE;
+            transaction.type() = TX_MESSAGE;
             // read_transaction_message_datatype (transaction, transactionJson);
         }
         else {
@@ -62,14 +62,14 @@ namespace ICONation::SDK
 
     static void read_transaction_v3 (Transaction &transaction, const json &transactionJson)
     {
-        transaction.mutable_from() = Address (transactionJson["from"].get<std::string>());
-        transaction.mutable_to()   = Address (transactionJson["to"].get<std::string>());
-        transaction.mutable_hash() = Transaction::Hash (transactionJson["txHash"].get<std::string>());
-        transaction.mutable_stepLimit() = ICX::Step (transactionJson["stepLimit"].get<std::string>());
+        transaction.from() = Address (transactionJson["from"].get<std::string>());
+        transaction.to()   = Address (transactionJson["to"].get<std::string>());
+        transaction.hash() = Transaction::Hash (transactionJson["txHash"].get<std::string>());
+        transaction.stepLimit() = ICX::Step (transactionJson["stepLimit"].get<std::string>());
 
         if (transactionJson.find ("value") != transactionJson.end()) {
             // ICX transfer transaction
-            transaction.mutable_type() = TX_ICX_TRANSFER;
+            transaction.type() = TX_ICX_TRANSFER;
             read_transaction_icx_transfer (transaction, transactionJson);
         }
         else if (transactionJson.find ("dataType") != transactionJson.end()) {
@@ -89,14 +89,14 @@ namespace ICONation::SDK
         const ICX::Loop stepPrice = (ICX::Loop) 10 * 1000 * 1000 * 1000;
         const ICX::Step stepUsed = fee / stepPrice;
 
-        transaction.mutable_type() = TX_ICX_TRANSFER;
-        transaction.mutable_from() = Address (transactionJson["from"].get<std::string>());
-        transaction.mutable_to() = Address (transactionJson["to"].get<std::string>());
-        transaction.mutable_hash() = Transaction::Hash (transactionJson["tx_hash"].get<std::string>());
-        transaction.mutable_amount() = ICX::Loop (transactionJson["value"].get<std::string>());
-        transaction.mutable_stepLimit() = 0;
-        transaction.mutable_stepPrice() = stepPrice;
-        transaction.mutable_stepUsed() = stepUsed;
+        transaction.type() = TX_ICX_TRANSFER;
+        transaction.from() = Address (transactionJson["from"].get<std::string>());
+        transaction.to() = Address (transactionJson["to"].get<std::string>());
+        transaction.hash() = Transaction::Hash (transactionJson["tx_hash"].get<std::string>());
+        transaction.amount() = ICX::Loop (transactionJson["value"].get<std::string>());
+        transaction.stepLimit() = 0;
+        transaction.stepPrice() = stepPrice;
+        transaction.stepUsed() = stepUsed;
     }
 
     static void read_transaction_content (Transaction &transaction, const json &transactionJson)
@@ -140,7 +140,7 @@ namespace ICONation::SDK
                 Token::Unit amount (event["indexed"][3].get<std::string>());
 
                 InternalTransaction internalTx (from, to, m_icx, amount);
-                transaction.mutable_internalTransactions().emplace_back (internalTx);
+                transaction.internalTransactions().emplace_back (internalTx);
             }
             else if (event["indexed"][0] == "Transfer(Address,Address,int,bytes)")
             {
@@ -173,7 +173,7 @@ namespace ICONation::SDK
                 }
 
                 InternalTransaction internalTx (from, to, irc2, amount);
-                transaction.mutable_internalTransactions().emplace_back (internalTx);
+                transaction.internalTransactions().emplace_back (internalTx);
             }
         }
     }
@@ -217,8 +217,8 @@ namespace ICONation::SDK
 
         // Get the additionnal data from icx_getTransactionResult
         TransactionResult result = get_transaction_result (transaction.hash());
-        transaction.mutable_stepPrice() = result.stepPrice();
-        transaction.mutable_stepUsed() = result.stepUsed();
+        transaction.stepPrice() = result.stepPrice();
+        transaction.stepUsed() = result.stepUsed();
         if (!result.eventLogs().empty()) {
             read_event_logs (transaction, result.eventLogs());
         }
@@ -248,7 +248,7 @@ namespace ICONation::SDK
         for (auto &transactionJson : result["confirmed_transaction_list"])
         {
             Transaction transaction = read_transaction (transactionJson);
-            block.mutable_transactions().push_back (transaction);
+            block.transactions().push_back (transaction);
         }
     }
 
@@ -321,8 +321,8 @@ namespace ICONation::SDK
             std::vector<Account> accounts = read_genesis_accounts (transactionJson);
 
             // Append accounts to the genesis block
-            genesis.mutable_accounts().insert (
-                std::end (genesis.mutable_accounts()),
+            genesis.accounts().insert (
+                std::end (genesis.accounts()),
                 std::begin (accounts),
                 std::end (accounts)  
             );
@@ -462,7 +462,7 @@ namespace ICONation::SDK
         return Wallet::load (privateKey);
     }
 
-    SDK::Blockchain::Wallet Client::wallet_load (void *privateKeyBytes)
+    SDK::Blockchain::Wallet Client::wallet_load (const void *privateKeyBytes)
     {
         std::vector<unsigned char> privateKey (PRIVATE_KEY_SIZE);
         memcpy (&privateKey[0], privateKeyBytes, PRIVATE_KEY_SIZE);

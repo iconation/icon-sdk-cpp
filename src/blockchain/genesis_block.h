@@ -19,7 +19,7 @@ namespace ICONation::SDK::Blockchain
         private:
             std::vector<Account> m_accounts;
         public:
-            std::vector<Account> &mutable_accounts (void) { return m_accounts; }
+            std::vector<Account> &accounts (void) { return m_accounts; }
             const std::vector<Account> &accounts (void) const { return m_accounts; }
     };
 }
