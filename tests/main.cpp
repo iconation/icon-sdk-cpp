@@ -15,8 +15,8 @@ namespace ICONation::SDK::Tests
 {
     // Global variables
     // ICONation Testnet citizen node
-    // SDK::Client client ("http://iconation.team:9000/api/v3");
-    SDK::Client client ("https://testwallet.icon.foundation/api/v3", EULJIRO);
+    SDK::Client client ("http://iconation.team:9000/api/v3", EULJIRO);
+    // SDK::Client client ("https://testwallet.icon.foundation/api/v3", EULJIRO);
     // I wonder how much time it will last until someone steal our testnet ICX :D
     // hx520707648aff4291e9686304acacbd82396ecefa
     const Wallet wallet = client.wallet_load (
@@ -159,7 +159,7 @@ namespace ICONation::SDK::Tests
         EXPECT_NO_THROW (hash = client.wallet_send_icx (wallet, GOVERNANCE_SCORE_ADDRESS, 0, 1000000));
 
         // Wait
-        Dbg::info ("Waiting for 1 seconds...");
+        Dbg::info ("Waiting for 2 seconds...");
         std::this_thread::sleep_for (std::chrono::milliseconds (2 * 1000));
 
         EXPECT_NO_THROW (result = client.get_transaction_result (hash));
@@ -180,7 +180,7 @@ namespace ICONation::SDK::Tests
         EXPECT_NO_THROW (hash = client.wallet_send_icx (wallet, GOVERNANCE_SCORE_ADDRESS, 0, 1000000));
 
         // Wait
-        Dbg::info ("Waiting for 1 seconds...");
+        Dbg::info ("Waiting for 2 seconds...");
         std::this_thread::sleep_for (std::chrono::milliseconds (2 * 1000));
 
         EXPECT_NO_THROW (tx = client.get_transaction_by_hash (hash););
