@@ -7,6 +7,7 @@
 #include "blockchain/token.h"
 #include "blockchain/transaction.h"
 #include "blockchain/transaction_result.h"
+#include "blockchain/network.h"
 #include "common/jsonrpc/jsonrpc.h"
 
 namespace ICONation::SDK
@@ -17,7 +18,8 @@ namespace ICONation::SDK
     {
         // Allocators
         public:
-            Client (const std::string &endpoint);
+            // By 
+            Client (const std::string &endpoint, const Blockchain::Network &nid = Blockchain::MAINNET);
             ~Client (void) = default;
 
         // RPC Methods
@@ -136,6 +138,12 @@ namespace ICONation::SDK
         // JSON-RPC client
         private:
             Common::JsonRPC::Client m_client;
+        
+        // Network ID
+        public:
+            const Blockchain::Network &network (void) const { return m_nid; }
+        private:
+            Blockchain::Network m_nid;
 
         // ICX native token definition
         public:

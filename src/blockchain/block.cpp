@@ -26,7 +26,7 @@ namespace ICONation::SDK::Blockchain
 
     std::string Block::to_string (void) const
     {
-        return fmt::format ("Height = {} | Hash = {} | %d transactions", m_height, m_hash.to_string(), m_transactions.size());
+        return fmt::format ("Height = {} | Hash = {} | {} transactions", m_height, m_hash.to_string(), m_transactions.size());
     }
 
     std::ostream &operator << (std::ostream &stream, const Block &block) {

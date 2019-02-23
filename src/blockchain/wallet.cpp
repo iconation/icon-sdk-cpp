@@ -226,7 +226,7 @@ namespace ICONation::SDK::Blockchain
         return serialized;
     }
 
-    nlohmann::json Wallet::get_common_transaction (const Address &to, const ICX::Step &stepLimit, const int &nonce) const
+    nlohmann::json Wallet::get_common_transaction (const Address &to, const ICX::Step &stepLimit, const Network &nid, const int &nonce) const
     {
         nlohmann::json tx;
         std::chrono::milliseconds nowMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
@@ -238,8 +238,8 @@ namespace ICONation::SDK::Blockchain
         tx["stepLimit"] = "0x" + stepLimit.get_str (16);
         tx["timestamp"] = fmt::format ("{:#x}", 1000 * nowMilliseconds.count());
         tx["nonce"] = fmt::format ("{:#x}", nonce);
-        tx["nid"] = "0x3";
-        
+        tx["nid"] = fmt::format ("{:#x}", nid);
+
         return tx;
     }
 
@@ -264,10 +264,11 @@ namespace ICONation::SDK::Blockchain
         const Address &to, 
         const ICX::Loop &value, 
         const ICX::Step &stepLimit, 
+        const Network &nid,
         const int &nonce
     ) const
     {
-        nlohmann::json tx = get_common_transaction (to, stepLimit, nonce);
+        nlohmann::json tx = get_common_transaction (to, stepLimit, nid, nonce);
 
         tx["value"] = "0x" + value.get_str (16);
 
@@ -281,10 +282,11 @@ namespace ICONation::SDK::Blockchain
         const std::string &method, 
         const nlohmann::json &callParams, 
         const ICX::Step &stepLimit, 
+        const Network &nid,
         const int &nonce
     ) const
     {
-        nlohmann::json tx = get_common_transaction (to, stepLimit, nonce);
+        nlohmann::json tx = get_common_transaction (to, stepLimit, nid, nonce);
 
         tx["dataType"] = "call";
         tx["data"]["method"] = method;
@@ -302,10 +304,11 @@ namespace ICONation::SDK::Blockchain
         const Address &to, 
         const std::string &contentType, const std::vector<unsigned char> &content, const nlohmann::json &scoreParams,
         const ICX::Step &stepLimit, 
+        const Network &nid,
         const int &nonce
     ) const
     {
-        nlohmann::json tx = get_common_transaction (to, stepLimit, nonce);
+        nlohmann::json tx = get_common_transaction (to, stepLimit, nid, nonce);
 
         // Convert content to hexstring
         std::string contentHex = "0x";

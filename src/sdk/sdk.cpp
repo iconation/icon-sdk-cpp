@@ -9,8 +9,9 @@ using namespace ICONation::SDK::Blockchain;
 
 namespace ICONation::SDK
 {
-    Client::Client (const std::string &endpoint)
-    :   m_client (endpoint)
+    Client::Client (const std::string &endpoint, const Network &nid)
+    :   m_client (endpoint),
+        m_nid (nid)
     {
         // Get ICX properties
         ICX::Loop icxSupply = get_total_supply();
@@ -481,7 +482,7 @@ namespace ICONation::SDK
         const int &nonce
     ) {
         // Build params
-        json params = wallet.get_signed_icx_transaction (to, value, stepLimit, nonce);
+        json params = wallet.get_signed_icx_transaction (to, value, stepLimit, m_nid, nonce);
 
         // RPC Call
         json result = call ("icx_sendTransaction", params);
@@ -517,7 +518,7 @@ namespace ICONation::SDK
         const int &nonce
     ) {
         // Build params
-        json params = wallet.get_signed_call_transaction (score, method, callParams, stepLimit, nonce);
+        json params = wallet.get_signed_call_transaction (score, method, callParams, stepLimit, m_nid, nonce);
 
         // RPC Call
         json result = call ("icx_sendTransaction", params);
@@ -533,7 +534,7 @@ namespace ICONation::SDK
         const int &nonce
     ) {
         // Build params
-        json params = wallet.get_signed_deploy_transaction (score, contentType, content, callParams, stepLimit, nonce);
+        json params = wallet.get_signed_deploy_transaction (score, contentType, content, callParams, stepLimit, m_nid, nonce);
 
         // RPC Call
         json result = call ("icx_sendTransaction", params);

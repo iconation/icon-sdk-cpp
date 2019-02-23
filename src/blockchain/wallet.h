@@ -2,6 +2,7 @@
 
 #include "address.h"
 #include "transaction.h"
+#include "network.h"
 #include <vector>
 #include <secp256k1.h>
 #include <experimental/filesystem>
@@ -35,7 +36,7 @@ namespace ICONation::SDK::Blockchain
 
         // Private / Public keys
         public:
-            std::vector<unsigned char> get_private_key (void) { return m_privateKey; }
+            std::vector<unsigned char> get_private_key (void) const { return m_privateKey; }
         private:
             std::vector<unsigned char> m_privateKey;
             std::vector<unsigned char> m_publicKey;
@@ -59,31 +60,34 @@ namespace ICONation::SDK::Blockchain
         public:
             // https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#coin-transfer
             nlohmann::json get_signed_icx_transaction (
-                const Address &to, 
-                const ICX::Loop &value, 
-                const ICX::Step &stepLimit, 
+                const Address &to,
+                const ICX::Loop &value,
+                const ICX::Step &stepLimit,
+                const Network &nid,
                 const int &nonce = 0
             ) const;
             
             // https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#score-function-call
             nlohmann::json get_signed_call_transaction (
-                const Address &to, 
-                const std::string &method, 
-                const nlohmann::json &callParams, 
-                const ICX::Step &stepLimit, 
+                const Address &to,
+                const std::string &method,
+                const nlohmann::json &callParams,
+                const ICX::Step &stepLimit,
+                const Network &nid,
                 const int &nonce = 0
             ) const;
 
             // https://github.com/icon-project/icon-rpc-server/blob/develop/docs/icon-json-rpc-v3.md#score-install
             nlohmann::json get_signed_deploy_transaction (
-                const Address &to, 
+                const Address &to,
                 const std::string &contentType, const std::vector<unsigned char> &content, const nlohmann::json &scoreParams,
-                const ICX::Step &stepLimit, 
-                const int &nonce
+                const ICX::Step &stepLimit,
+                const Network &nid,
+                const int &nonce = 0
             ) const;
 
         private:
-            nlohmann::json get_common_transaction (const Address &to, const ICX::Step &stepLimit, const int &nonce = 0) const;
+            nlohmann::json get_common_transaction (const Address &to, const ICX::Step &stepLimit, const Network &nid, const int &nonce) const;
             void sign_transaction (nlohmann::json &tx) const;
 
         // Secp256k1
