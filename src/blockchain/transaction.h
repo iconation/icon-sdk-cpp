@@ -80,12 +80,11 @@ namespace ICONation::SDK::Blockchain
             ICX::Loop m_amount;
 
         // Transaction message
-        // Only set if TransactionType == TX_MESSAGE
         public:
-            const std::vector<unsigned char> &message (void) const { return m_message; }
-            std::vector<unsigned char> &message (void) { return m_message; }
+            const std::string &message (void) const { return m_message; }
+            std::string &message (void) { return m_message; }
         private:
-            std::vector<unsigned char> m_message;
+            std::string m_message;
 
         // Steps
         public:
