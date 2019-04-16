@@ -82,13 +82,11 @@ file (GLOB_RECURSE SDK_TESTS_SRC
 # --- SDK Library
 add_library (SDK_lib STATIC ${SDK_SRC})
 target_include_directories (SDK_lib PRIVATE ${SDK_SRCDIR})
-target_include_directories (SDK_lib PRIVATE ${COMMON_SRCDIR})
 target_link_libraries (SDK_lib ${MPIR_LIBRARIES} ${SECP256K1_LIBRAIRIES} ${OPENSSL_LIBRAIRIES})
 
 # --- SDK Tests executable
 add_executable (SDK_Tests ${SDK_TESTS_SRC})
 target_include_directories (SDK_Tests PRIVATE ${SDK_SRCDIR})
-target_include_directories (SDK_Tests PRIVATE ${COMMON_SRCDIR})
 target_link_libraries(SDK_Tests SDK_lib common_lib ${GTEST_LIBRARIES} ${PTHREAD_LIBRARIES})
 set_target_properties(SDK_Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set_target_properties(SDK_Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
