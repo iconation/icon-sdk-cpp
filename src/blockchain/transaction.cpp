@@ -15,14 +15,12 @@ namespace ICONation::SDK::Blockchain
         const Transaction::Hash &hash, 
         const Address &from, 
         const Address &to,
-        const ICX::Loop &amount,
-        const TransactionType &type
+        const ICX::Loop &amount
     )
     :   m_hash (hash),
         m_from (from),
         m_to (to),
-        m_amount (amount),
-        m_type (type)
+        m_amount (amount)
     {
         check_consistency();
     }
@@ -32,9 +30,6 @@ namespace ICONation::SDK::Blockchain
         m_hash.check_consistency();
         m_from.check_consistency();
         m_to.check_consistency();
-        if (m_type == TX_UNKNOWN) {
-            throw Exception::InvalidTransactionType (m_type);
-        }
     }
 
     std::string Transaction::to_string (void) const

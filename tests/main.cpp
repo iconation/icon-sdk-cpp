@@ -11,6 +11,13 @@
 using namespace ICONation::Common;
 using namespace ICONation::SDK::Blockchain;
 
+#define DEBUG_TRY_CATCH(_x) \
+    try { _x; } catch (const std::exception &e) { \
+        Dbg::error ("Application exception :"); \
+        Dbg::error ("    - Type   : {}", typeid(e).name()); \
+        Dbg::error ("    - Reason : {}", e.what()); \
+    }
+
 namespace ICONation::SDK::Tests
 {
     // Global variables
@@ -30,7 +37,7 @@ namespace ICONation::SDK::Tests
     Block::Hash emptyBlockHash ("0x0000000000000000000000000000000000000000000000000000000000000000");
     Address emptyAddress ("hx0000000000000000000000000000000000000000");
     Transaction::Hash emptyTxHash ("0x0000000000000000000000000000000000000000000000000000000000000000");
-    Transaction emptyTx (emptyTxHash, emptyAddress, emptyAddress, 0, TX_ICX_TRANSFER);
+    Transaction emptyTx (emptyTxHash, emptyAddress, emptyAddress, 0);
     TransactionResult emptyTxResult (emptyAddress, 0, emptyBlockHash.value(), emptyTx.hash().value(), 0, 0, {});
 
     TEST (Hash, BlockHash)
@@ -101,7 +108,18 @@ namespace ICONation::SDK::Tests
         // Check errors
         EXPECT_THROW (client.get_block_by_height (-1), SDK::Exception::RPCError);
     }
-    
+
+    TEST (RPC, ICX_ReadTransactionData)
+    {
+        Block block;
+
+        EXPECT_NO_THROW (block = client.get_block_by_height (56189));
+        EXPECT_EQ (block.transactions().size(), 1);
+        const auto &transaction = block.transactions()[0];
+        EXPECT_STREQ (transaction.hash().to_string().c_str(), "0xd5d298eb694c46d5485579bc56efa1548d09a9940dd82f74b0638082248da473");
+        EXPECT_EQ (transaction.message().size(), 1381);
+    }
+
     TEST (RPC, ICX_GetGenesisBlock)
     {
         GenesisBlock genesis;

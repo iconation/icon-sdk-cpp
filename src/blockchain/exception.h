@@ -42,12 +42,6 @@ namespace ICONation::SDK::Blockchain::Exception
         virtual char const *what (void) const throw() { return exception::what(); }
     };
 
-    struct InvalidTransactionType : public std::runtime_error {
-        InvalidTransactionType (const Blockchain::TransactionType &type) throw()
-        :   std::runtime_error (fmt::format ("Invalid Transaction type '{}'", type)) {}
-        virtual char const *what (void) const throw() { return exception::what(); }
-    };
-    
     struct InvalidBlockHeight : public std::runtime_error {
         InvalidBlockHeight (const Blockchain::Block::Height &height, const std::string &message) throw()
         :   std::runtime_error (fmt::format ("Invalid Block Height ({}) : '{}'", height, message)) {}

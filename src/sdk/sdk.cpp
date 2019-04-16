@@ -3,6 +3,8 @@
 #include "blockchain/exception.h"
 #include "common/exception/exception.h"
 #include "exception.h"
+#include <ios>
+#include <sstream>
 
 using json = nlohmann::json;
 using namespace ICONation::SDK::Blockchain;
@@ -36,24 +38,46 @@ namespace ICONation::SDK
         transaction.amount() = ICX::Loop (transactionJson["value"].get<std::string>());
     }
 
+    static std::vector<unsigned char> hexstring_to_bytes (const std::string &input)
+    {
+        if (input.substr(0, 2) != "0x") {
+            throw Blockchain::Exception::InvalidPrefix (input, "0x");
+        }
+
+        // -1 because we don't count the "0x" prefix
+        std::vector<unsigned char> output ((input.size() / 2) - 1);
+
+        for (std::string::size_type i = 2; i < input.size(); i += 2)
+        {
+            unsigned char byte = strtol (input.substr(i, 2).c_str(), NULL, 16);
+            output[(i-1)/2] = byte;
+        }
+
+        return output;
+    }
+
+    static void read_transaction_message (Transaction &transaction, const json &transactionJson)
+    {
+        // The transaction message is hex-encoded
+        std::vector<unsigned char> dataBytes = hexstring_to_bytes (transactionJson["data"].get<std::string>());
+        transaction.message() = dataBytes;
+    }
+
     static void read_transaction_data (Transaction &transaction, const json &transactionJson)
     {
         const std::string &dataType = transactionJson["dataType"].get<std::string>();
 
         // SCORE Method call transaction
         if (dataType == "call") {
-            transaction.type() = TX_SCORE_CALL;
             // read_transaction_call (transaction, transactionJson);
         }
         // SCORE Deploy transaction
         else if (dataType == "deploy") {
-            transaction.type() = TX_SCORE_DEPLOY;
             // read_transaction_deploy (transaction, transactionJson);
         }
         // Message transaction
         else if (dataType == "message") {
-            transaction.type() = TX_MESSAGE;
-            // read_transaction_message_datatype (transaction, transactionJson);
+            read_transaction_message (transaction, transactionJson);
         }
         else {
             throw Common::Exception::Unimplemented (fmt::format ("Invalid transaction dataType : {}", transactionJson.dump(4)));
@@ -69,14 +93,11 @@ namespace ICONation::SDK
 
         if (transactionJson.find ("value") != transactionJson.end()) {
             // ICX transfer transaction
-            transaction.type() = TX_ICX_TRANSFER;
             read_transaction_icx_transfer (transaction, transactionJson);
         }
-        else if (transactionJson.find ("dataType") != transactionJson.end()) {
+
+        if (transactionJson.find ("dataType") != transactionJson.end()) {
             read_transaction_data (transaction, transactionJson);
-        }
-        else {
-            throw Common::Exception::Unimplemented (fmt::format ("Invalid transaction : {}", transactionJson.dump(4)));
         }
     }
 
@@ -89,7 +110,6 @@ namespace ICONation::SDK
         const ICX::Loop stepPrice = (ICX::Loop) 10 * 1000 * 1000 * 1000;
         const ICX::Step stepUsed = fee / stepPrice;
 
-        transaction.type() = TX_ICX_TRANSFER;
         transaction.from() = Address (transactionJson["from"].get<std::string>());
         transaction.to() = Address (transactionJson["to"].get<std::string>());
         transaction.hash() = Transaction::Hash (transactionJson["tx_hash"].get<std::string>());

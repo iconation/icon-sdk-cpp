@@ -13,16 +13,6 @@ namespace ICONation::SDK::Blockchain
     const size_t TX_HASH_SIZE = 64;
     const Hash::Prefix TX_HASH_PREFIX = "0x";
 
-    // A transaction may include multiple things
-    enum TransactionType
-    {
-        TX_UNKNOWN,
-        TX_ICX_TRANSFER,
-        TX_SCORE_CALL,
-        TX_SCORE_DEPLOY,
-        TX_MESSAGE,
-    };
-
     class Transaction
     {
         // Transaction specific types
@@ -54,8 +44,7 @@ namespace ICONation::SDK::Blockchain
                 const Transaction::Hash &hash, 
                 const Address &from, 
                 const Address &to,
-                const ICX::Loop &amount,
-                const TransactionType &type 
+                const ICX::Loop &amount
             );
 
             ~Transaction (void) = default;
@@ -90,12 +79,13 @@ namespace ICONation::SDK::Blockchain
         private:
             ICX::Loop m_amount;
 
-        // Transaction type
+        // Transaction message
+        // Only set if TransactionType == TX_MESSAGE
         public:
-            const TransactionType &type (void) const { return m_type; }
-            TransactionType &type (void) { return m_type; }
+            const std::vector<unsigned char> &message (void) const { return m_message; }
+            std::vector<unsigned char> &message (void) { return m_message; }
         private:
-            TransactionType m_type = TX_UNKNOWN;
+            std::vector<unsigned char> m_message;
 
         // Steps
         public:
