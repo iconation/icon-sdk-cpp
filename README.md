@@ -21,7 +21,7 @@ using namespace ICONation::SDK::Blockchain;
 int main (int argc, char **argv)
 {
     // Create SDK-RPC client
-    ICONation::SDK::Client client ("http://iconation.team:9100/api/v3");
+    Client client ("http://iconation.team:9100/api/v3");
 
     // Generate a new ICX wallet
     Wallet wallet = client.wallet_create();
