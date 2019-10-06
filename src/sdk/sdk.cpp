@@ -64,6 +64,11 @@ static void read_transaction_data(Transaction &transaction, const json &transact
     {
         read_transaction_message(transaction, transactionJson);
     }
+    // Fee 2.0 deposit transaction
+    else if (dataType == "deposit")
+    {
+        // read_transaction_deposit (transaction, transactionJson);
+    }
     else
     {
         throw Common::Exception::Unimplemented(fmt::format("Invalid transaction dataType : {}", transactionJson.dump(4)));
