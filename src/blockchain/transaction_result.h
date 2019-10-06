@@ -7,64 +7,70 @@
 
 namespace ICONation::SDK::Blockchain
 {
-    class TransactionResult
-    {
-        // Allocator
-        public:
-            TransactionResult (
-                const Address &to,
-                const Block::Height &height,
-                const Block::Hash &blockHash,
-                const Transaction::Hash &txHash,
-                const ICX::Step &stepUsed,
-                const ICX::Loop &stepPrice,
-                const nlohmann::json &eventLogs
-            );
+class TransactionResult
+{
+    // Allocator
+public:
+    TransactionResult(
+        const Address &to,
+        const Block::Height &height,
+        const Block::Hash &blockHash,
+        const Transaction::Hash &txHash,
+        const ICX::Step &stepUsed,
+        const ICX::Loop &stepPrice,
+        const nlohmann::json &eventLogs);
 
-            ~TransactionResult (void) = default;
+    ~TransactionResult(void) = default;
 
-        // Address destination
-        public:
-            const Address &to (void) const { return m_to; }
-        private:
-            Address m_to;
+    // Address destination
+public:
+    const Address &to(void) const { return m_to; }
 
-        // Block height
-        public:
-            const Block::Height &height (void) const { return m_height; }
-        private:
-            Block::Height m_height;
+private:
+    Address m_to;
 
-        // Block hash
-        public:
-            const Block::Hash &blockHash (void) const { return m_blockHash; }
-        private:
-            Block::Hash m_blockHash;
+    // Block height
+public:
+    const Block::Height &height(void) const { return m_height; }
 
-        // Transaction hash
-        public:
-            const Transaction::Hash &txHash (void) const { return m_txHash; }
-        private:
-            Transaction::Hash m_txHash;
+private:
+    Block::Height m_height;
 
-        // Steps
-        public:
-            const ICX::Step &stepUsed (void) const { return m_stepUsed; }
-            const ICX::Loop &stepPrice (void) const { return m_stepPrice; }
-        private:
-            ICX::Step m_stepUsed;
-            ICX::Loop m_stepPrice;
+    // Block hash
+public:
+    const Block::Hash &blockHash(void) const { return m_blockHash; }
 
-        // Event logs
-        public:
-            const nlohmann::json &eventLogs (void) const { return m_eventLogs; }
-        private:
-            nlohmann::json m_eventLogs;
+private:
+    Block::Hash m_blockHash;
 
-        // Function for debug purposes
-        public:
-            std::string to_string (void) const;
-        public:
-            friend std::ostream &operator << (std::ostream &stream, const TransactionResult &block);
-    };
-}
+    // Transaction hash
+public:
+    const Transaction::Hash &txHash(void) const { return m_txHash; }
+
+private:
+    Transaction::Hash m_txHash;
+
+    // Steps
+public:
+    const ICX::Step &stepUsed(void) const { return m_stepUsed; }
+    const ICX::Loop &stepPrice(void) const { return m_stepPrice; }
+
+private:
+    ICX::Step m_stepUsed;
+    ICX::Loop m_stepPrice;
+
+    // Event logs
+public:
+    const nlohmann::json &eventLogs(void) const { return m_eventLogs; }
+
+private:
+    nlohmann::json m_eventLogs;
+
+    // Function for debug purposes
+public:
+    std::string to_string(void) const;
+
+public:
+    friend std::ostream &operator<<(std::ostream &stream, const TransactionResult &block);
+};
+} // namespace ICONation::SDK::Blockchain

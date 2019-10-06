@@ -6,36 +6,41 @@
 
 namespace ICONation::SDK::Blockchain
 {
-    class InternalTransaction
-    {
-        // Allocators
-        public:
-            InternalTransaction (const Address &from, const Address &to, const std::shared_ptr<Token> &token, const Token::Unit &amount);
-            ~InternalTransaction (void) = default;
+class InternalTransaction
+{
+    // Allocators
+public:
+    InternalTransaction(const Address &from, const Address &to, const std::shared_ptr<Token> &token, const Token::Unit &amount);
+    ~InternalTransaction(void) = default;
 
-        // Sender & Receiver
-        public:
-            const Address &to (void) const { return m_to; }
-            Address &to (void) { return m_to; }
-        private:
-            Address m_from;
-        public:
-            const Address &from (void) const { return m_from; }
-            Address &from (void) { return m_from; }
-        private:
-            Address m_to;
+    // Sender & Receiver
+public:
+    const Address &to(void) const { return m_to; }
+    Address &to(void) { return m_to; }
 
-        // Token
-        public:
-            const Token &token (void) const { return *m_token; }
-        private:
-            std::shared_ptr<Token> m_token;
+private:
+    Address m_from;
 
-        // Transaction token amount
-        public:
-            const Token::Unit &amount (void) const { return m_amount; }
-            Token::Unit &amount (void) { return m_amount; }
-        private:
-            Token::Unit m_amount;
-    };
-}
+public:
+    const Address &from(void) const { return m_from; }
+    Address &from(void) { return m_from; }
+
+private:
+    Address m_to;
+
+    // Token
+public:
+    const Token &token(void) const { return *m_token; }
+
+private:
+    std::shared_ptr<Token> m_token;
+
+    // Transaction token amount
+public:
+    const Token::Unit &amount(void) const { return m_amount; }
+    Token::Unit &amount(void) { return m_amount; }
+
+private:
+    Token::Unit m_amount;
+};
+} // namespace ICONation::SDK::Blockchain
