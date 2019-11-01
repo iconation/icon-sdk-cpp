@@ -5,6 +5,7 @@
 
 namespace ICONation::SDK::Blockchain
 {
+const std::string ZERO_ADDRESS_EOA = "hx0000000000000000000000000000000000000000";
 class Account
 {
     // Allocators

@@ -69,6 +69,11 @@ static void read_transaction_data(Transaction &transaction, const json &transact
     {
         // read_transaction_deposit (transaction, transactionJson);
     }
+    // Base IISS transaction
+    else if (dataType == "base")
+    {
+        // read_transaction_base (transaction, transactionJson);
+    }
     else
     {
         throw Common::Exception::Unimplemented(fmt::format("Invalid transaction dataType : {}", transactionJson.dump(4)));
@@ -77,10 +82,19 @@ static void read_transaction_data(Transaction &transaction, const json &transact
 
 static void read_transaction_v3(Transaction &transaction, const json &transactionJson)
 {
-    transaction.from() = Address(transactionJson["from"].get<std::string>());
-    transaction.to() = Address(transactionJson["to"].get<std::string>());
+    transaction.from() = transactionJson.find("from") != transactionJson.end()
+                             ? Address(transactionJson["from"].get<std::string>())
+                             : Address(ZERO_ADDRESS_EOA);
+
+    transaction.to() = transactionJson.find("to") != transactionJson.end()
+                           ? Address(transactionJson["to"].get<std::string>())
+                           : Address(ZERO_ADDRESS_EOA);
+
+    transaction.stepLimit() = transactionJson.find("stepLimit") != transactionJson.end()
+                                  ? ICX::Step(transactionJson["stepLimit"].get<std::string>())
+                                  : ICX::Step(0);
+
     transaction.hash() = Transaction::Hash(transactionJson["txHash"].get<std::string>());
-    transaction.stepLimit() = ICX::Step(transactionJson["stepLimit"].get<std::string>());
 
     if (transactionJson.find("value") != transactionJson.end())
     {
